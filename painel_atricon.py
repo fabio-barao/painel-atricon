@@ -192,22 +192,22 @@ st.plotly_chart(fig2, use_container_width=True)
 # ===============================
 # Download Excel (blindado)
 # ===============================
-def to_excel(df):
-    df.columns = [str(col) for col in df.columns]
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-        df.to_excel(writer, index=False, sheet_name="Dados Filtrados")
-        workbook = writer.book
-        worksheet = writer.sheets["Dados Filtrados"]
-        for i, col in enumerate(df.columns):
-            col_width = max(df[col].astype(str).map(len).max(), len(col)) + 2
-            worksheet.set_column(i, i, col_width)
-    output.seek(0)
-    return output
+# def to_excel(df):
+#    df.columns = [str(col) for col in df.columns]
+#    output = BytesIO()
+#    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+#        df.to_excel(writer, index=False, sheet_name="Dados Filtrados")
+#        workbook = writer.book
+#        worksheet = writer.sheets["Dados Filtrados"]
+#        for i, col in enumerate(df.columns):
+#            col_width = max(df[col].astype(str).map(len).max(), len(col)) + 2
+#            worksheet.set_column(i, i, col_width)
+#    output.seek(0)
+#    return output
 
-st.sidebar.download_button(
-    label="📥 Baixar dados filtrados em Excel",
-    data=to_excel(df_filtrado),
-    file_name="dados_filtrados.xlsx",
-    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-)
+#st.sidebar.download_button(
+#    label="📥 Baixar dados filtrados em Excel",
+#    data=to_excel(df_filtrado),
+#    file_name="dados_filtrados.xlsx",
+#    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#)
