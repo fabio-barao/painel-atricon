@@ -18,15 +18,16 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ===============================
-# Carregar base
+# Carregar base com mensagem de carregamento
 # ===============================
 @st.cache_data
 def carregar_dados():
     df = pd.read_excel("Base_Painel.xlsx")
     return df
 
-df = carregar_dados()
-df["Ano"] = df["Ano"].astype(str)  # evita valores tipo 2022.5
+with st.spinner("Carregando dados..."):
+    df = carregar_dados()
+    df["Ano"] = df["Ano"].astype(str)  # evita valores tipo 2022.5
 
 # ===============================
 # Sidebar com logo e filtros
@@ -189,26 +190,18 @@ st.plotly_chart(fig1, use_container_width=True)
 st.plotly_chart(fig2, use_container_width=True)
 
 # ===============================
-# Download Excel (versão blindada)
+# Download Excel (blindado)
 # ===============================
 def to_excel(df):
-    # Garantir que nomes de colunas sejam string
     df.columns = [str(col) for col in df.columns]
-
-    # Criar buffer
     output = BytesIO()
-
-    # Usar xlsxwriter para evitar erro de serialização
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         df.to_excel(writer, index=False, sheet_name="Dados Filtrados")
-
-        # Ajustar largura automática das colunas
         workbook = writer.book
         worksheet = writer.sheets["Dados Filtrados"]
         for i, col in enumerate(df.columns):
             col_width = max(df[col].astype(str).map(len).max(), len(col)) + 2
             worksheet.set_column(i, i, col_width)
-
     output.seek(0)
     return output
 
